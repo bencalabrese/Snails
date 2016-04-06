@@ -1,5 +1,3 @@
-require 'filemagic'
-
 class StaticAsset
 
   attr_reader :app, :req

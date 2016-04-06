@@ -17,9 +17,10 @@ class ControllerBase
 
   # Setup the controller
   def initialize(req, res, params = {})
+    # byebug
     @req = req
     @res = res
-    @params = params
+    @params = @req.params.merge(params)
     @already_built_response = false
 
     csrf_check if self.class.protect_from_forgery?

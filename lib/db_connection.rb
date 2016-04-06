@@ -1,7 +1,8 @@
 require 'sqlite3'
 require 'yaml'
+require 'byebug'
 
-app_name = YAML.load_file('config.yml')['app_name']
+app_name = YAML.load_file('lib/config.yml')['app_name']
 
 PRINT_QUERIES = ENV['PRINT_QUERIES'] == 'true'
 # https://tomafro.net/2010/01/tip-relative-paths-with-file-expand-path
