@@ -3,6 +3,7 @@ require_relative '../lib/controller_base'
 require_relative '../lib/router'
 require_relative  '../lib/exception_middleware'
 require_relative '../views/errors/test_me'
+require_relative '../lib/static_assets'
 
 $cats = [
   { id: 1, name: "Curie" },
@@ -49,6 +50,7 @@ end
 
 app = Rack::Builder.app do
   use ExceptionMiddleware
+  use StaticAsset
   run app_proc
 end
 
