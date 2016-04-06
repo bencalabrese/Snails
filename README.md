@@ -7,9 +7,9 @@ Note: Have to add "self.finalize!" to models to create getters and setters.
 
 ##Done
 ###Middleware
-Exception Handling
-Static Assets
-CSRF Protection  
+Exception Handling  
+Static Assets  
+CSRF Protection    
 
 ##Todo
 ###Middleware
