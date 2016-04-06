@@ -1,6 +1,7 @@
 # rails_lite
 
 Note: Flash and Session hash keys must be strings.
+
 Note: Snails standard is to both use and not use attr_readers as the mood and season dictates.
 
 ##Done
