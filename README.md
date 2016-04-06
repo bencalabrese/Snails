@@ -2,24 +2,23 @@
 
 Note: Flash and Session hash keys must be strings.
 
-Done
-====
-Middleware
-----------
+##Done
+###Middleware
 Exception Handling
 
 
-Todo
-====
-Middleware
-----------
+##Todo
+###Middleware
 Static Assets - Bryan
+
 Logging
+
 CSRF Protection
+
 snails generate migration
+
 snails new
 
 
-Other
------
+##Other
 Integrate Active Record Lite
