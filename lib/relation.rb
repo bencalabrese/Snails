@@ -1,20 +1,4 @@
 require_relative 'db_connection'
-require_relative '01_sql_object'
-
-module Searchable
-  def where(params)
-    relation = Relation.new(
-      klass: self,
-      where_pairs: params,
-      from: table_name
-    )
-  end
-end
-
-class SQLObject
-  # Mixin Searchable here...
-  extend Searchable
-end
 
 class Relation
   attr_reader :opts
