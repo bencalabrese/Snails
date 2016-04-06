@@ -7,12 +7,49 @@ require_relative './flash'
 class ControllerBase
   attr_reader :req, :res, :params
 
+  def self.protect_from_forgery(boolean = true)
+    @@protect_from_forgery = boolean
+  end
+
+  def self.protect_from_forgery?
+    @@protect_from_forgery ||= false
+  end
+
   # Setup the controller
   def initialize(req, res, params = {})
     @req = req
     @res = res
     @params = params
     @already_built_response = false
+
+    csrf_check if self.class.protect_from_forgery?
+  end
+
+  def session
+    @session ||= Session.new(@req)
+  end
+
+  def flash
+    @flash ||= Flash.new(@req)
+  end
+
+  def form_authenticity_token
+    session["authenticity_token"]
+  end
+
+  def invoke_action(name)
+    self.send(name)
+    render(name) unless already_built_response?
+  end
+
+  private
+  def csrf_check
+    if req.get?
+      session["authenticity_token"] = SecureRandom.urlsafe_base64(16)
+    else
+      raise "CSRF ATTACK!" unless
+        req.params["authenticity_token"] == form_authenticity_token
+    end
   end
 
   # Helper method to alias @already_built_response
@@ -59,17 +96,6 @@ class ControllerBase
   end
 
   # method exposing a `Session` object
-  def session
-    @session ||= Session.new(@req)
-  end
-
-  def flash
-    @flash ||= Flash.new(@req)
-  end
 
   # use this with the router to call action_name (:index, :show, :create...)
-  def invoke_action(name)
-    self.send(name)
-    render(name) unless already_built_response?
-  end
 end
