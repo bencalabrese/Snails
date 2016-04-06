@@ -1,0 +1,14 @@
+<b>Flash Errors:</b>
+<% if flash['errors'] %>
+  <% flash['errors'].each do |error| %>
+    <%= error %>
+  <% end %>
+<% end %>
+<br />
+
+<b>Flash Now:</b>
+<%= flash.now['error'] %>
+<br />
+
+<b>Session Count:</b>
+<%= session["count"] %>

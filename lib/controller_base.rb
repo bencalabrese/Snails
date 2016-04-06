@@ -2,9 +2,7 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'erb'
 require_relative './session'
-require 'rack'
-
-require 'byebug'
+require_relative './flash'
 
 class ControllerBase
   attr_reader :req, :res, :params
@@ -33,6 +31,7 @@ class ControllerBase
     @res.headers['Location'] = url
     @res.status = 302
     session.store_session(@res)
+    flash.store_flash(@res)
   end
 
   # Populate the response with content.
@@ -44,17 +43,17 @@ class ControllerBase
     @res.body = [content]
     @res.finish
     session.store_session(@res)
+    flash.store_flash(@res)
   end
 
   # use ERB and binding to evaluate templates
   # pass the rendered html to render_content
   def render(template_name)
-    folder = self.class.to_s[0..-11] + '_' + self.class.to_s[-10..-1]
-    file_path = "#{Dir.pwd}/views/#{folder}/#{template_name}.html.erb"
+    folder = self.class.to_s.underscore.downcase
+    file_path = "#{Dir.pwd}/views/#{folder}/#{template_name.to_s}.html.erb"
 
-    file = File.open(file_path)
-    contents = file.read
-    erb_template = ERB.new(contents).result(binding)
+    file = File.read(file_path)
+    erb_template = ERB.new(file).result(binding)
 
     render_content(erb_template, 'text/html')
   end
@@ -64,8 +63,13 @@ class ControllerBase
     @session ||= Session.new(@req)
   end
 
+  def flash
+    @flash ||= Flash.new(@req)
+  end
+
   # use this with the router to call action_name (:index, :show, :create...)
   def invoke_action(name)
     self.send(name)
+    render(name) unless already_built_response?
   end
 end
