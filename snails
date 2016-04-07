@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require 'byebug'
+
+SNAILS_DIRECTORIES = ["cp -r /Users/a_paulson/Documents/AA_Work/snails/.snails ." ,
+                "mkdir app",
+                "mkdir app/controllers",
+                "mkdir app/views",
+                "mkdir app/models",
+                "mkdir bin",
+                "mkdir config"]
+
+def make_snails(app_name, location)
+  #byebug
+  Dir.chdir("#{location}")
+  system("mkdir #{app_name}")
+  Dir.chdir("#{app_name}")
+  SNAILS_DIRECTORIES.each do |command|
+    system(command)
+  end
+
+  File.open('config/config.yml', "w") do |f|
+    f.write("app_name: #{app_name}")
+  end
+end
+
+def parse_command(args)
+  case args.first
+  when "new"
+    make_snails(args[1], args[2])
+  end
+end
+
+parse_command(ARGV)
